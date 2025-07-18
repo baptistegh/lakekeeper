@@ -28,8 +28,8 @@ pub(crate) enum OpenFGAError {
     NoProjectId,
     #[error("Authentication required")]
     AuthenticationRequired,
-    #[error("Unauthorized for action `{relation}` on `{object}` for `{user}`")]
-    Unauthorized {
+    #[error("Forbidden for action `{relation}` on `{object}` for `{user}`")]
+    Forbidden {
         user: String,
         relation: String,
         object: String,
@@ -66,8 +66,8 @@ impl From<OpenFGAError> for ErrorModel {
             e @ OpenFGAError::AuthenticationRequired => {
                 ErrorModel::unauthorized(err_msg, "AuthenticationRequired", Some(Box::new(e)))
             }
-            e @ OpenFGAError::Unauthorized { .. } => {
-                ErrorModel::unauthorized(err_msg, "Unauthorized", Some(Box::new(e)))
+            e @ OpenFGAError::Forbidden { .. } => {
+                ErrorModel::forbidden(err_msg, "Forbidden", Some(Box::new(e)))
             }
             e @ OpenFGAError::SelfAssignment { .. } => {
                 ErrorModel::bad_request(err_msg, "SelfAssignment", Some(Box::new(e)))

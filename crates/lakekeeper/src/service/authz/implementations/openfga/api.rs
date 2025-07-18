@@ -1468,7 +1468,7 @@ async fn get_allowed_actions<A: ReducedRelation + IntoEnumIterator>(
 
         let allowed = authorizer.clone().check(key).await?;
         if !allowed {
-            return Err(OpenFGAError::Unauthorized {
+            return Err(OpenFGAError::Forbidden {
                 user: openfga_actor.clone(),
                 relation: RoleAction::ReadAssignments.to_openfga().to_string(),
                 object: object.to_string(),
@@ -1532,7 +1532,7 @@ async fn checked_write<RA: Assignment>(
         if allowed {
             Ok(())
         } else {
-            Err(OpenFGAError::Unauthorized {
+            Err(OpenFGAError::Forbidden {
                 user: openfga_actor.clone(),
                 relation: relation.to_string(),
                 object: object.to_string(),
